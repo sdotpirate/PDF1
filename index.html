@@ -31,12 +31,16 @@
             max-width: 600px;
             text-align: center;
         }
-        input[type="file"], input[type="text"], select {
+        input[type="file"], input[type="text"], select, textarea {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ddd;
             border-radius: 4px;
+        }
+        textarea {
+            height: 300px;
+            resize: none;
         }
         button {
             width: 100%;
@@ -54,17 +58,7 @@
         .adsense {
             margin-top: 20px;
         }
-        #editor-container {
-            height: 300px;
-            margin-bottom: 20px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-align: left;
-        }
     </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
 </head>
 <body>
     <div class="container">
@@ -76,7 +70,7 @@
             <option value="first">First Page</option>
             <option value="last">Last Page</option>
         </select>
-        <div id="editor-container"></div>
+        <textarea id="editor" placeholder="Enter your notes here..."></textarea>
         <button id="createPdfButton">Create PDF</button>
         <div class="adsense">
             <!-- Google AdSense Placeholder -->
@@ -91,6 +85,8 @@
             </script>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
