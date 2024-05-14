@@ -3,7 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize CKEditor
     ClassicEditor
-        .create(document.querySelector('#editor-container'))
+        .create(document.querySelector('#editor-container'), {
+            toolbar: ['heading', '|', 'bold', 'italic', 'underline', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'],
+            removePlugins: ['Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed']
+        })
         .then(newEditor => {
             editor = newEditor;
         })
