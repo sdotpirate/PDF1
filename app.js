@@ -1,22 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let editor;
-
-    // Initialize CKEditor
-    ClassicEditor
-        .create(document.querySelector('#editor-container'), {
-            toolbar: ['heading', '|', 'bold', 'italic', 'underline', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'],
-            removePlugins: ['Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed']
-        })
-        .then(newEditor => {
-            editor = newEditor;
-        })
-        .catch(error => {
-            console.error(error);
-        });
-
     document.getElementById('createPdfButton').addEventListener('click', () => {
         const input = document.getElementById('fileInput');
-        const notes = editor.getData();
+        const notes = document.getElementById('editor').value;
         const notesPosition = document.getElementById('notesPosition').value;
         const customFileName = document.getElementById('fileNameInput').value.trim();
 
@@ -102,11 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.font = '16px Arial';
         ctx.fillStyle = 'black';
 
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = notes;
-        const textContent = tempDiv.innerText || tempDiv.textContent;
-
-        const lines = textContent.split('\n');
+        const lines = notes.split('\n');
         let y = 30;
         lines.forEach(line => {
             ctx.fillText(line.trim(), 20, y);
