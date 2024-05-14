@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('createPdfButton').addEventListener('click', () => {
         const input = document.getElementById('fileInput');
-        const notes = document.getElementById('editor').value;
+        const notes = tinymce.get('editor').getContent();
         const notesPosition = document.getElementById('notesPosition').value;
         const customFileName = document.getElementById('fileNameInput').value.trim();
 
@@ -87,7 +87,11 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.font = '16px Arial';
         ctx.fillStyle = 'black';
 
-        const lines = notes.split('\n');
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = notes;
+        const textContent = tempDiv.innerText || tempDiv.textContent;
+
+        const lines = textContent.split('\n');
         let y = 30;
         lines.forEach(line => {
             ctx.fillText(line.trim(), 20, y);
