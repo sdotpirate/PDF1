@@ -1,19 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Quill rich text editor
-    var quill = new Quill('#editor-container', {
-        theme: 'snow',
-        modules: {
-            toolbar: [
-                [{ 'header': [1, 2, false] }],
-                ['bold', 'italic', 'underline'],
-                ['image', 'code-block']
-            ]
-        }
-    });
+    let editor;
+
+    // Initialize CKEditor
+    ClassicEditor
+        .create(document.querySelector('#editor-container'))
+        .then(newEditor => {
+            editor = newEditor;
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
     document.getElementById('createPdfButton').addEventListener('click', () => {
         const input = document.getElementById('fileInput');
-        const notes = quill.root.innerHTML;
+        const notes = editor.getData();
         const notesPosition = document.getElementById('notesPosition').value;
         const customFileName = document.getElementById('fileNameInput').value.trim();
 
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const images = await Promise.all(promises);
 
-        if (notes && notes.trim() !== '<p><br></p>') {
+        if (notes && notes.trim() !== '') {
             if (notesPosition === 'first') {
                 addNotesPage(pdf, notes);
                 images.forEach((imgData, index) => {
@@ -98,10 +98,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         ctx.font = '16px Arial';
         ctx.fillStyle = 'black';
-        const lines = notes.split('<br>');
+
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = notes;
+        const textContent = tempDiv.innerText || tempDiv.textContent;
+
+        const lines = textContent.split('\n');
         let y = 30;
         lines.forEach(line => {
-            ctx.fillText(line.replace(/<\/?[^>]+(>|$)/g, ""), 20, y);
+            ctx.fillText(line.trim(), 20, y);
             y += 20;
         });
 
