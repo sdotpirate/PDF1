@@ -19,9 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const images = await Promise.all(promises);
 
-        if (notes && notes.trim() !== '') {
+        const cleanedNotes = notes.replace(/<p><\/p>$/g, '').trim();
+
+        if (cleanedNotes) {
             if (notesPosition === 'first') {
-                await addNotesPage(pdf, notes);
+                await addNotesPage(pdf, cleanedNotes);
                 images.forEach((imgData, index) => {
                     pdf.addPage();
                     pdf.addImage(imgData, 'JPEG', 10, 10, 190, 0);
@@ -32,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     pdf.addImage(imgData, 'JPEG', 10, 10, 190, 0);
                 });
                 pdf.addPage();
-                await addNotesPage(pdf, notes);
+                await addNotesPage(pdf, cleanedNotes);
             }
         } else {
             images.forEach((imgData, index) => {
