@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (index > 0) pdf.addPage();
                     pdf.addImage(imgData, 'JPEG', 10, 10, 190, 0);
                 });
-                pdf.addPage();
                 await addNotesPage(pdf, cleanedNotes);
             }
         } else {
