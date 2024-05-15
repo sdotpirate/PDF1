@@ -19,11 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const images = await Promise.all(promises);
 
-        const cleanedNotes = notes.replace(/<p><\/p>$/g, '').trim();
-
-        if (cleanedNotes) {
+        if (notes && notes.trim() !== '') {
             if (notesPosition === 'first') {
-                await addNotesPage(pdf, cleanedNotes);
+                addNotesPage(pdf, notes);
                 images.forEach((imgData, index) => {
                     pdf.addPage();
                     pdf.addImage(imgData, 'JPEG', 10, 10, 190, 0);
@@ -33,7 +31,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (index > 0) pdf.addPage();
                     pdf.addImage(imgData, 'JPEG', 10, 10, 190, 0);
                 });
-                await addNotesPage(pdf, cleanedNotes);
+                pdf.addPage();
+                addNotesPage(pdf, notes);
             }
         } else {
             images.forEach((imgData, index) => {
@@ -77,13 +76,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    async function addNotesPage(pdf, notes) {
-        const tempDiv = document.createElement('div');
-        tempDiv.style.width = '595px'; // A4 size in pt (210mm)
-        tempDiv.style.padding = '20px';
-        tempDiv.innerHTML = notes;
+    function addNotesPage(pdf, notes) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 595; // A4 size in pt (210mm)
+        canvas.height = 842; // A4 size in pt (297mm)
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        const canvas = await html2canvas(tempDiv, { scale: 2 });
+        ctx.font = '16px Arial';
+        ctx.fillStyle = 'black';
+
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = notes;
+        const textContent = tempDiv.innerText || tempDiv.textContent;
+
+        const lines = textContent.split('\n');
+        let y = 30;
+        lines.forEach(line => {
+            ctx.fillText(line.trim(), 20, y);
+            y += 20;
+        });
 
         pdf.addImage(canvas.toDataURL('image/jpeg'), 'JPEG', 0, 0, 210, 297);
     }
