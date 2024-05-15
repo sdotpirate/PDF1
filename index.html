@@ -77,7 +77,13 @@
             menubar: false,
             toolbar_mode: 'floating',
             height: 300,
-            branding: false
+            branding: false,
+            content_style: 'body { line-height: 1; }',
+            setup: function(editor) {
+                editor.on('init', function() {
+                    editor.setContent(editor.getContent().replace(/<p><\/p>$/g, ''));
+                });
+            }
         });
     </script>
 </head>
